@@ -49,7 +49,12 @@ sub render_uml (\%) {
 	error($@) if $@;
 	my $sha=IkiWiki::possibly_foolish_untaint(Digest::SHA::sha1_hex($src));
 
-	my $dest=$params{page}."/uml-".$sha.".png";
+	my $format_info = {
+		png => { ext => ".png", flag => "-tpng" },
+		svg => { ext => ".svg", flag => "-tsvg" },
+	};
+	my $use_format = 'svg';
+	my $dest=$params{page}."/uml-".$sha. $format_info->{$use_format}{ext};
 	will_render($params{page}, $dest);
 	
         $src = "\@startuml\n".
@@ -73,7 +78,7 @@ sub render_uml (\%) {
 		my $pid;
 		my $sigpipe=0;
 		$SIG{PIPE}=sub { $sigpipe=1 };
-		$pid=open2(*IN, *OUT, "java -jar $params{jar} -charset UTF-8 -pipe > '$config{destdir}/$dest'");
+		$pid=open2(*IN, *OUT, "java -jar $params{jar} -charset UTF-8 -pipe @{[ $format_info->{$use_format}{flag} ]} > '$config{destdir}/$dest'");
 
 		# open2 doesn't respect "use open ':utf8'"
 		binmode (IN, ':utf8');
