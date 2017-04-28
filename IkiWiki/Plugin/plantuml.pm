@@ -62,19 +62,19 @@ sub render_uml (\%) {
 	       $src.
 	       "\@enduml\n";
 
-	print $src;
-	print $config{destdir}."\n";
-	print "$config{destdir}/$dest"."\n";
+	print STDERR $src;
+	print STDERR $config{destdir}."\n";
+	print STDERR "$config{destdir}/$dest"."\n";
 
-	print "jar $params{jar}";
+	print STDERR "jar $params{jar}";
 
 	if (! -e "$config{destdir}/$dest") {
-		print "STOADT\n";
+		print STDERR "STOADT\n";
 		# Use ikiwiki's function to create the image file, this makes
 		# sure needed subdirs are there and does some sanity checking.
 		writefile($dest, $config{destdir}, "");
 
-		print "jar $params{jar}";
+		print STDERR "jar $params{jar}";
 		my $pid;
 		my $sigpipe=0;
 		$SIG{PIPE}=sub { $sigpipe=1 };
@@ -102,7 +102,7 @@ sub uml (@) {
 	my %params=@_;
 	my $key;
 
-	print "src = " . $params{src};
+	print STDERR "src = " . $params{src};
 	$params{jar}=dirname($INC{"IkiWiki/Plugin/plantuml.pm"})."/plantuml.jar";
 
 	return render_uml(%params);
