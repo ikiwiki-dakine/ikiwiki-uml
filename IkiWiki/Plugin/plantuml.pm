@@ -35,15 +35,15 @@ sub needsbuild {
 			# the uml is still there during the rebuild
 			delete $pagestate{$page}{uml};
 		}
-	}       
+	}
 	return $needsbuild;
 }
 
 sub render_uml (\%) {
 	my %params = %{(shift)};
-	
+
 	my $src = $params{src};
-	
+
 	# Use the sha1 of the graphviz code as part of its filename,
 	eval q{use Digest::SHA};
 	error($@) if $@;
@@ -56,7 +56,7 @@ sub render_uml (\%) {
 	my $use_format = 'svg';
 	my $dest=$params{page}."/uml-".$sha. $format_info->{$use_format}{ext};
 	will_render($params{page}, $dest);
-	
+
         $src = "\@startuml\n".
 	       "\'".urlto($dest, $params{destpage}).
 	       $src.
@@ -65,8 +65,8 @@ sub render_uml (\%) {
 	print $src;
 	print $config{destdir}."\n";
 	print "$config{destdir}/$dest"."\n";
-        
-	print "jar $params{jar}";		
+
+	print "jar $params{jar}";
 
 	if (! -e "$config{destdir}/$dest") {
 		print "STOADT\n";
@@ -74,7 +74,7 @@ sub render_uml (\%) {
 		# sure needed subdirs are there and does some sanity checking.
 		writefile($dest, $config{destdir}, "");
 
-		print "jar $params{jar}";		
+		print "jar $params{jar}";
 		my $pid;
 		my $sigpipe=0;
 		$SIG{PIPE}=sub { $sigpipe=1 };
