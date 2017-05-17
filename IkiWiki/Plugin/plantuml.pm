@@ -57,16 +57,16 @@ sub render_uml (\%) {
 	my $dest=$params{page}."/uml-".$sha. $format_info->{$use_format}{ext};
 	will_render($params{page}, $dest);
 
-        $src = "\@startuml\n".
-	       "\'".urlto($dest, $params{destpage}).
-	       $src.
-	       "\@enduml\n";
+	$src = "\@startuml\n"
+		. "\' ".urlto($dest, $params{destpage}) . "\n"
+		. $src
+		. "\n\@enduml\n";
 
-	print STDERR $src;
+	print STDERR "$src\n";
 	print STDERR $config{destdir}."\n";
 	print STDERR "$config{destdir}/$dest"."\n";
 
-	print STDERR "jar $params{jar}";
+	#print STDERR "jar $params{jar}";
 
 	if (! -e "$config{destdir}/$dest") {
 		print STDERR "STOADT\n";
@@ -102,8 +102,8 @@ sub uml (@) {
 	my %params=@_;
 	my $key;
 
-	print STDERR "src = " . $params{src};
-	$params{jar}=dirname($INC{"IkiWiki/Plugin/plantuml.pm"})."/plantuml.jar";
+	#print STDERR "src = " . $params{src};
+	$params{jar} = dirname($INC{"IkiWiki/Plugin/plantuml.pm"})."/plantuml.jar";
 
 	return render_uml(%params);
 }
