@@ -46,8 +46,9 @@ sub render_uml (\%) {
 
 	# Use the sha1 of the graphviz code as part of its filename,
 	eval q{use Digest::SHA};
+	eval q{use Encode qw(encode_utf8)};
 	error($@) if $@;
-	my $sha=IkiWiki::possibly_foolish_untaint(Digest::SHA::sha1_hex($src));
+	my $sha=IkiWiki::possibly_foolish_untaint(Digest::SHA::sha1_hex(encode_utf8($src)));
 
 	my $format_info = {
 		png => { ext => ".png", flag => "-tpng" },
